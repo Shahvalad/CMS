@@ -1,0 +1,139 @@
+<nav id="my-nav" class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Champions</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item active">
+          <button type="button" class="btn btn-primary" (click)="onOpenModal(null,'add')">
+            Add Champion
+          </button>
+        </li>
+      </ul>
+      <form class="d-flex ms-auto">
+        <input
+          class="form-control me-2"
+          type="search"
+          placeholder="Search"
+          aria-label="Search"
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="getFilteredChampions()"
+          name="search"
+        />
+    </form>
+    </div>
+</nav>
+  
+<div class="row">
+    <div *ngFor="let champion of filteredChampions" class="col-md-3">
+        <div class="card" style="width: 100%;">
+            <img src="{{champion.imageUrl}}" class="card-img-top" alt="champion image">
+            <div class="card-body">
+                <h5 class="card-title">{{champion.name}}</h5>
+                <p class="card-text">{{champion.role}}</p>
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-primary" (click)="onOpenModal(champion,'edit')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger" (click)="onOpenModal(champion,'delete')">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+  
+  <!-- Add Champion -->
+  <div class="modal fade" id="addChampionModal" tabindex="-1" aria-labelledby="addChampionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addChampionModalLabel">Add Champion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form #addForm="ngForm" (ngSubmit)="onAddChampion(addForm)">
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input ngModel name="name" type="text" class="form-control" id="exampleInputName" placeholder="Enter name" required>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputRole">Role</label>
+                  <input ngModel name="role" type="text" class="form-control" id="exampleInputRole" placeholder="Role" required>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputImageUrl">Image URL</label>
+                    <input ngModel name="imageUrl" type="text" class="form-control" id="exampleInputImageUrl" placeholder="URL" required>
+                </div>
+                <div class="modal-footer">
+                    <button id="add-champion-close-button" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Save changes</button>
+                </div>              
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Champion Modal -->
+  <div class="modal fade" id="editChampionModal" tabindex="-1" aria-labelledby="editChampionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editChampionModalLabel">Edit Champion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form #editForm="ngForm">
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input ngModel="{{existingChampion.name}}" name="name" type="text" class="form-control" id="exampleInputName" placeholder="Enter name" required>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputRole">Role</label>
+                  <input ngModel="{{existingChampion.role}}" name="role" type="text" class="form-control" id="exampleInputRole" placeholder="Role" required>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputImageUrl">Image URL</label>
+                    <input ngModel="{{existingChampion.imageUrl}}" name="imageUrl" type="text" class="form-control" id="exampleInputImageUrl" placeholder="URL" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button (click)="onEditChampion(existingChampionId,editForm.value)" type="submit" class="btn btn-primary">Save changes</button>
+                </div>              
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="deleteChampionModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModelLabel">Delete Champion</h5>
+          <button id="delete-close-button" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this champion?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button (click)="onDeleteChampion(existingChampionId)" type="button" class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
