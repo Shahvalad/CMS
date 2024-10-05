@@ -106,8 +106,8 @@ public onDeleteChampion(id: number): void {
     }
     else if (mode === 'edit') {
       if (champion) {
-          this.existingChampion = champion; // Ensure this is defined
-          this.existingChampionId = champion.id; // Ensure ID is set properly
+          this.existingChampion = champion; 
+          this.existingChampionId = champion.id; 
       } else {
           console.error('Champion is null while opening edit modal');
       }
